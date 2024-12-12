@@ -14,15 +14,17 @@ This repository contains the code & annotation data for our ICCV 2019 paper: ['D
 ## Requirements
 
 - Please install OpenCV
-- Please install Python 2.7
-- Please install tensorflow-gpu
+- Please install Python 3.x
+- Please install tensorflow-gpu 2.x
 
-Our code has been tested by using tensorflow-gpu==1.10.1 & OpenCV==3.1.0. We used Nvidia Titan Xp GPU with CUDA 9.0 installed.
+Our code has been updated to be compatible with Python 3.x and TensorFlow 2.x. We recommend using the latest versions of these packages.
 
 ## Python packages
 
 - [numpy]
 - [scipy]
+- [imageio]
+- [Pillow] (for image processing)
 - [Pillow]
 - [matplotlib]
 
@@ -89,11 +91,11 @@ If you find our work useful in your research, please consider citing:
 
 ---
 
-	@InProceedings{zlzeng2019deepfloor,
-		author = {Zhiliang ZENG, Xianzhi LI, Ying Kin Yu, and Chi-Wing Fu},
-		title = {Deep Floor Plan Recognition using a Multi-task Network with Room-boundary-Guided Attention},
-		booktitle = {IEEE International Conference on Computer Vision (ICCV)},
-		year = {2019}
-	}
+        @InProceedings{zlzeng2019deepfloor,
+                author = {Zhiliang ZENG, Xianzhi LI, Ying Kin Yu, and Chi-Wing Fu},
+                title = {Deep Floor Plan Recognition using a Multi-task Network with Room-boundary-Guided Attention},
+                booktitle = {IEEE International Conference on Computer Vision (ICCV)},
+                year = {2019}
+        }
 
 ---

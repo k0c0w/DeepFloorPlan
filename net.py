@@ -9,7 +9,9 @@ import time
 import random
 
 from scipy import ndimage
-from scipy.misc import imread, imresize, imsave
+from imageio import imread
+from scipy.ndimage import zoom
+from PIL import Image
 
 sys.path.append('./utils/')
 from rgb_ind_convertor import *

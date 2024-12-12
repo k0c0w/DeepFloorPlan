@@ -7,7 +7,9 @@ import time
 import random
 
 import numpy as np
-from scipy.misc import imread, imresize, imsave
+from imageio import imread
+from scipy.ndimage import zoom
+from PIL import Image
 from matplotlib import pyplot as plt
 
 sys.path.append('./utils/')

@@ -1,6 +1,8 @@
 import argparse
 import numpy as np
-from scipy.misc import imread, imsave, imresize
+from imageio import imread
+from scipy.ndimage import zoom
+from PIL import Image
 
 import os
 import sys
