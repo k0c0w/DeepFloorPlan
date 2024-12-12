@@ -16,7 +16,7 @@ from PIL import Image
 sys.path.append('./utils/')
 from rgb_ind_convertor import *
 from util import fast_hist
-from tf_record import read_record, read_bd_rm_record
+from utils.tf_record import read_record, read_bd_rm_record
 
 GPU_ID = '0'
 

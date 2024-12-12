@@ -2,6 +2,7 @@ import argparse
 import numpy as np
 from imageio import imread
 from scipy.ndimage import zoom
+from scipy.ndimage import imread
 from PIL import Image
 
 import os
