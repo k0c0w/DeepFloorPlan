@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from scipy import ndimage
+import skimage.morphology
 
 def fast_hist(im, gt, n=9):
     """
@@ -14,42 +15,47 @@ def flood_fill(test_array, h_max=255):
 	fill in the hole 
 	"""
 	input_array = np.copy(test_array) 
-	el = ndimage.generate_binary_structure(2,2).astype(np.int)
+	el = ndimage.generate_binary_structure(2,2).astype(np.int64)
 	inside_mask = ndimage.binary_erosion(~np.isnan(input_array), structure=el)
 	output_array = np.copy(input_array)
 	output_array[inside_mask]=h_max
 	output_old_array = np.copy(input_array)
 	output_old_array.fill(0)   
-	el = ndimage.generate_binary_structure(2,1).astype(np.int)
+	el = ndimage.generate_binary_structure(2,1).astype(np.int64)
 	while not np.array_equal(output_old_array, output_array):
 		output_old_array = np.copy(output_array)
 		output_array = np.maximum(input_array,ndimage.grey_erosion(output_array, size=(3,3), footprint=el))
 	return output_array
 
 def fill_break_line(cw_mask):
-	broken_line_h = np.array([[0,0,0,0,0],
+  wall_expansion_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+  cw_mask = cv2.dilate(cw_mask, wall_expansion_kernel)
+  broken_line_h = np.array([[0,0,0,0,0],
 							[0,0,0,0,0],
 							[1,0,0,0,1],
 							[0,0,0,0,0],
 							[0,0,0,0,0]], dtype=np.uint8)	
-	broken_line_h2 = np.array([[0,0,0,0,0],
+  broken_line_h2 = np.array([[0,0,0,0,0],
 							[0,0,0,0,0],
 							[1,1,0,1,1],
 							[0,0,0,0,0],
-							[0,0,0,0,0]], dtype=np.uint8)			
-	broken_line_v = np.transpose(broken_line_h)
-	broken_line_v2 = np.transpose(broken_line_h2)
-	cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_h)
-	cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_v)
-	cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_h2)
-	cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_v2)
+							[0,0,0,0,0]], dtype=np.uint8)
 
-	return cw_mask	
+  broken_line_v = np.transpose(broken_line_h)
+  broken_line_v2 = np.transpose(broken_line_h2)
+  cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_h)
+  cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_v)
+  cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_h2)
+  cw_mask = cv2.morphologyEx(cw_mask, cv2.MORPH_CLOSE, broken_line_v2)
+
+  cw_mask = skimage.morphology.skeletonize(cw_mask)
+
+  return cw_mask		
 
 def refine_room_region(cw_mask, rm_ind):
 	label_rm, num_label = ndimage.label((1-cw_mask))
 	new_rm_ind = np.zeros(rm_ind.shape)
-	for j in xrange(1, num_label+1):  
+	for j in range(1, num_label+1):  
 		mask = (label_rm == j).astype(np.uint8)
 		ys, xs = np.where(mask!=0)
 		area = (np.amax(xs)-np.amin(xs))*(np.amax(ys)-np.amin(ys))

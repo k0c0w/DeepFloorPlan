@@ -3,8 +3,7 @@ import argparse
 import os
 import sys
 import glob
-import time
-import random
+
 
 import numpy as np
 from imageio import imread
